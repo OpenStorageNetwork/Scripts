@@ -48,8 +48,8 @@ def get_user_info(user_list):
     stats_json = {}
     stats_string = ""
 
-    with open('OSN_Projects.text', "w") as fp:
-        fp.write("      QUOTAS FOR USER ACCOUNTS:\n")
+    with open('/var/log/OSN_Projects.txt', "w") as fp:
+        fp.write("      QUOTAS FOR USER ACCOUNTS:\n\n")
     #    fp.write(userlist)
 
 
@@ -66,13 +66,13 @@ def get_user_info(user_list):
             user_json = json.loads(user_info)
             print(user_json)
             user_quota_max_size = user_json['user_quota']['max_size_kb']
-            quota = "       Quota for user account {} is {}Kb \n".format(i, user_quota_max_size)
+            quota = "      Quota for user account {} is {}Kb \n".format(i, user_quota_max_size)
             print(quota)
 
             fp.write(quota)
 
-            command2 = "sudo radosgw-admin user stats --uid={}".format(i)
-            command2_sh = shlex.split(command)
+            command = "sudo radosgw-admin user stats --uid={}".format(i)
+            command_sh = shlex.split(command)
 
             process = subprocess.Popen(command_sh,
                                 stdout=subprocess.PIPE,
@@ -82,8 +82,8 @@ def get_user_info(user_list):
 
             stats_json = json.loads(stats)
             print(stats_json)
-            user_stats_total_rounded = stats_json['total_bytes_rounded']
-            stats_string = "      Usage for user account {} is {} bytes \n".format(i, user_stats_total_rounded)
+            user_stats_total_rounded = stats_json['stats']['total_bytes_rounded']
+            stats_string = "      Usage for user account {} is {} bytes \n\n".format(i, user_stats_total_rounded)
             print(stats_string)
 
             fp.write(stats_string)
@@ -104,13 +104,21 @@ def get_user_info(user_list):
 
 get_user_info(get_user_list())
 
+def display_usage():
 
 
+    command = "cat /var/log/OSN_Projects.txt"
+    command_sh = shlex.split(command)
+    print(command_sh)
 
-
-
-
-
-
-
-
+    process = subprocess.Popen(command_sh,
+                    stdout=subprocess.PIPE,
+                    universal_newlines=True)
+    while True:
+       return_code = process.poll()
+       if return_code is not None:
+           #print('RETURN CODE', return_code)
+           for output in process.stdout.readlines():
+               print(output.strip())
+           break
+display_usage()
