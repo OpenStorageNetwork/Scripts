@@ -1,0 +1,26 @@
+Host mon01
+    HostName 172.16.3.11
+    User ansible
+Host mon02
+    HostName 172.16.3.12
+    User ansible
+Host mon03
+    HostName 172.16.3.13
+    User ansible
+    
+Host dat01
+    HostName 172.16.3.111
+    User ansible
+Host dat02
+    HostName 172.16.3.112
+    User ansible
+Host dat03
+    HostName 172.16.3.113
+    User ansible
+Host dat04
+    HostName 172.16.3.114
+    User ansible
+Host dat05
+    HostName 172.16.3.115
+    User ansible
+
