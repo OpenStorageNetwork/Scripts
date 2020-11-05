@@ -1,0 +1,18 @@
+---
+- hosts: all 
+  gather_facts: false
+  tasks:
+  - name: Run stats script on remote host
+    become: true
+    script: /home/jculbert/stats/stats.py
+    args:
+      executable: python
+    register: statres
+
+  - debug:
+      msg: "{{ statres.stdout }}"
+
+  - name: Dump local
+    shell: echo "{{ statres.stdout }}" >> foo.csv
+    delegate_to: localhost
+
